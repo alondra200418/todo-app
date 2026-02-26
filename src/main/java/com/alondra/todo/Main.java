@@ -7,6 +7,6 @@ public class Main {
 
         System.out.println("Task count: " + service.getTaskCount());
         System.out.println("Tasks: " + service.getTasks());
-        System.out.println("Demo build test!");
+        System.out.println("TESTING");
     }
 }
