@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-app
+spec:
+  replicas: 3 # SCALING: This satisfies the "Multi-pod/Scaling" requirement
+  selector:
+    matchLabels:
+      app: todo
+  template:
+    metadata:
+      labels:
+        app: todo
+    spec:
+      containers:
+        - name: todo-app
+          image: todo-app:latest # Jenkins will build this image
+          imagePullPolicy: Never # Tells Minikube to use the local image you just built
+          ports:
+            - containerPort: 8080
+          resources: # MONITORING: Essential for production systems
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-service
+spec:
+  type: NodePort # This allows you to access the app on your ASUS Vivobook
+  selector:
+    app: todo
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30007
